@@ -1,5 +1,8 @@
 package ud.prog3.pr02;
 
+import java.util.Date;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 /** "Mundo" del juego del coche.
@@ -11,6 +14,9 @@ import javax.swing.JPanel;
 public class MundoJuego {
 	private JPanel panel;  // panel visual del juego
 	CocheJuego miCoche;    // Coche del juego
+	
+	ArrayList <JLabelEstrella> listaEstrellas = new ArrayList <JLabelEstrella>();
+	
 	
 	/** Construye un mundo de juego
 	 * @param panel	Panel visual del juego
@@ -106,6 +112,90 @@ public class MundoJuego {
 	 */
 	public static double calcVelocidadConAceleracion( double vel, double acel, double tiempo ) {
 		return vel + (acel*tiempo);
+			
 	}
 	
+	//paso 5
+	/** Si han pasado más de 1,2 segundos desde la última,
+	* crea una estrella nueva en una posición aleatoria y la añade al mundo y al panel visual */
+	public void creaEstrella(){
+		
+		if(listaEstrellas != null && !listaEstrellas.isEmpty()){
+			
+			JLabelEstrella lastElement = listaEstrellas.get(listaEstrellas.size()-1);
+			
+			Date ultima = lastElement.getFechaCreacion();
+			
+			long lastMili = ultima.getTime();
+			
+			
+			Date ahora = new Date();
+			
+			long ahoraMili = ahora.getTime();
+			
+			
+			if((lastMili-ahoraMili)>=1200){
+				
+				
+				JLabelEstrella nuevaEstrella = new JLabelEstrella();
+				
+				listaEstrellas.add(nuevaEstrella);				
+				
+				
+			}
+			
+			else {
+				
+				JLabelEstrella nuevaEstrella = new JLabelEstrella();
+				
+				listaEstrellas.add(nuevaEstrella);	
+				
+				
+			};
+		}
+	}
+		
+	/** Quita todas las estrellas que lleven en pantalla demasiado tiempo
+	* y rota 10 grados las que sigan estando
+	* @param maxTiempo Tiempo máximo para que se mantengan las estrellas (msegs)
+	* @return Número de estrellas quitadas */	
+	public int quitaYRotaEstrellas (long mxTiempo) {
+		
+		int estrellasEliminadas = 0;
+		
+		for(JLabelEstrella estrella: listaEstrellas){
+			
+			Date ultima = estrella.getFechaCreacion();
+			
+			long lastMili = ultima.getTime();
+			
+				if (lastMili>= mxTiempo){
+					
+					listaEstrellas.remove(estrella);
+				
+					estrellasEliminadas = estrellasEliminadas + 1;
+				}
+				
+				else {
+										
+					estrella.setGiro(10);
+										
+				}
+		
+		}
+		
+			return estrellasEliminadas;
+		
+		
+	}
+	
+	
+		
+		
+		
+		
+		
+		
 }
+	
+

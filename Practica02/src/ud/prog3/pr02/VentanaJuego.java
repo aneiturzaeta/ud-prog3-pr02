@@ -15,12 +15,20 @@ public class VentanaJuego extends JFrame {
 	private static final long serialVersionUID = 1L;  // Para serialización
 	JPanel pPrincipal;         // Panel del juego (layout nulo)
 	MundoJuego miMundo;        // Mundo del juego
-	CocheJuego miCoche;        // Coche del juego
+	CocheJuego miCoche; 	  // Coche del juego
+	
+	Coche coche;
+	
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
 
+	//paso 3
+	boolean cursores [] = new boolean[] {false, false, false, false};
+	
+	
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
 	 */
+	
 	public VentanaJuego() {
 		// Liberación de la ventana por defecto al cerrar
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
@@ -75,24 +83,44 @@ public class VentanaJuego extends JFrame {
 		});
 		
 		// Añadido para que también se gestione por teclado con el KeyListener
+		//paso 3. array booleanos
+		
 		pPrincipal.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP: {
+						
 						miCoche.acelera( +5, 1 );
+						
+						//Coche.aplicarFuerza(0, coche);
+												
+						cursores[0] = true;
+						
 						break;
 					}
 					case KeyEvent.VK_DOWN: {
+						
 						miCoche.acelera( -5, 1 );
+						
+						//Coche.aplicarFuerza(0, coche);
+						
+						cursores[1] = true;
+						
 						break;
 					}
 					case KeyEvent.VK_LEFT: {
 						miCoche.gira( +10 );
+						
+						cursores[2] = true;
+						
 						break;
 					}
 					case KeyEvent.VK_RIGHT: {
 						miCoche.gira( -10 );
+						
+						cursores[3] = true;
+						
 						break;
 					}
 				}
@@ -136,6 +164,9 @@ public class VentanaJuego extends JFrame {
 			miVentana.miHilo = miVentana.new MiRunnable();  // Sintaxis de new para clase interna
 			Thread nuevoHilo = new Thread( miVentana.miHilo );
 			nuevoHilo.start();
+			
+				
+			
 		} catch (Exception e) {
 			System.exit(1);  // Error anormal
 		}
@@ -164,6 +195,14 @@ public class VentanaJuego extends JFrame {
 					Thread.sleep( 40 );
 				} catch (Exception e) {
 				}
+				
+				//Timer time = new Time (4, this);
+				
+						
+				miMundo.creaEstrella();
+				miMundo.quitaYRotaEstrellas(6000);
+				
+				
 			}
 		}
 		/** Ordena al hilo detenerse en cuanto sea posible
